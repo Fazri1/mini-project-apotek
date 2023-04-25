@@ -1,11 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"mini-project-apotek/config"
+	"mini-project-apotek/routes"
 )
 
 func main() {
 	config.InitDB()
-	fmt.Print("halo")
+	e := routes.New()
+
+	e.Logger.Fatal(e.Start(":8080"))
 }
