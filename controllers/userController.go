@@ -19,7 +19,7 @@ func CreateUserController(c echo.Context) error {
 			"message": err.Error(),
 		})
 	}
-
+	user.Password = "$"
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "Success create user",
 		"user":    user,
@@ -37,13 +37,19 @@ func LoginController(c echo.Context) error {
 		})
 	}
 
-	token, err := middlewares.CreateToken(user.ID, user.Name)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
+	userResponse := models.UserResponse{user.ID, user.Name, user.Email}
+	if user.Role == "admin" {
+		token, err := middlewares.CreateToken(user.ID, user.Name)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, err.Error())
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "success login",
+			"user":    userResponse,
+			"token":   token,
+		})
 	}
-
-	userResponse := models.UserResponse{user.ID, user.Name, user.Email, token}
-
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success login",
 		"user":    userResponse,
