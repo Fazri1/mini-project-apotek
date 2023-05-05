@@ -13,6 +13,8 @@ func CreateUserController(c echo.Context) error {
 	var user models.User
 
 	c.Bind(&user)
+	user.Role = "customer"
+
 	err := database.CreateUser(&user)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
