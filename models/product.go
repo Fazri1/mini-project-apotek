@@ -17,3 +17,18 @@ type ProductType struct {
 	gorm.Model
 	Name string `json:"name" form:"name" gorm:"type:varchar(20)"`
 }
+
+type ProductResponse struct {
+	ID              uint
+	Code            string
+	Name            string
+	Description     string
+	Product_Type_ID uint
+	Stock           uint
+	Price           uint
+}
+
+type AllProductResponse struct {
+	ID   uint
+	Name string
+}
