@@ -29,6 +29,7 @@ type ProductResponse struct {
 }
 
 type AllProductResponse struct {
-	ID   uint
-	Name string
+	ID    uint
+	Name  string
+	Price uint
 }
