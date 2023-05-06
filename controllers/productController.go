@@ -35,6 +35,7 @@ func AddProductController(c echo.Context) error {
 			"product": productResponse,
 		})
 	}
+
 	return c.JSON(http.StatusUnauthorized, map[string]string{
 		"message": "Unauthorized Action",
 	})
@@ -76,8 +77,6 @@ func UpdateProductController(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{
 			"message": err.Error(),
-		})
-	}
 
 	if admin {
 		var updatedProduct models.Product

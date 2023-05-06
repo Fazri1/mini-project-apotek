@@ -42,3 +42,4 @@ func GetUserTransactionDetail(user_id, transaction_id string) (models.Transactio
 	}
 	return transactionDetail, nil
 }
+

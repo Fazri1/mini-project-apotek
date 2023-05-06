@@ -18,11 +18,11 @@ func AddProductTypeController(c echo.Context) error {
 			"message": err.Error(),
 		})
 	}
-
+  
 	if admin {
 		var productType models.ProductType
 		c.Bind(&productType)
-
+    
 		err = database.SaveProductType(&productType)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
