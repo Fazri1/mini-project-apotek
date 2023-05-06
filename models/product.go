@@ -33,3 +33,20 @@ type AllProductResponse struct {
 	Name  string
 	Price uint
 }
+
+type ProductDetailResponse struct {
+	ID              uint
+	Code            string
+	Name            string
+	Description     string
+	Product_Type_ID uint
+	Stock           uint
+	Price           uint
+	ProductType     struct {
+		Name string
+	}
+}
+
+type ProductTypeResponse struct {
+	Name string
+}

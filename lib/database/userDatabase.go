@@ -42,3 +42,12 @@ func Login(user *models.User) (string, error) {
 
 	return user.Role, nil
 }
+
+func GetUserEmail(id string) string {
+	var user models.User
+	if err := config.DB.First(&user, id).Error; err != nil {
+		return ""
+	}
+
+	return user.Email
+}

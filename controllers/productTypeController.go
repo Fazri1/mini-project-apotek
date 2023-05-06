@@ -14,15 +14,15 @@ func AddProductTypeController(c echo.Context) error {
 	token := strings.Fields(c.Request().Header.Values("Authorization")[0])[1]
 	admin, err := middlewares.CheckTokenRole(token)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{
+		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"message": err.Error(),
 		})
 	}
-  
+
 	if admin {
 		var productType models.ProductType
 		c.Bind(&productType)
-    
+
 		err = database.SaveProductType(&productType)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -43,7 +43,7 @@ func AddProductTypeController(c echo.Context) error {
 func GetProductTypesController(c echo.Context) error {
 	productTypes, err := database.GetAllProductTypes()
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
 			"message": err.Error(),
 		})
 	}
@@ -59,7 +59,7 @@ func UpdateProductTypeController(c echo.Context) error {
 	token := strings.Fields(c.Request().Header.Values("Authorization")[0])[1]
 	admin, err := middlewares.CheckTokenRole(token)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{
+		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"message": err.Error(),
 		})
 	}
@@ -70,7 +70,7 @@ func UpdateProductTypeController(c echo.Context) error {
 
 		productType, err := database.GetProductTypeByID(c.Param("id"))
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
 				"message": err.Error(),
 			})
 		}
@@ -98,7 +98,7 @@ func DeleteProductTypeController(c echo.Context) error {
 	token := strings.Fields(c.Request().Header.Values("Authorization")[0])[1]
 	admin, err := middlewares.CheckTokenRole(token)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{
+		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"message": err.Error(),
 		})
 	}
@@ -112,7 +112,7 @@ func DeleteProductTypeController(c echo.Context) error {
 		}
 
 		return c.JSON(http.StatusOK, map[string]string{
-			"message": "Success Delete Product Type With Id: " + c.Param("id"),
+			"message": "Success Delete Product Type",
 		})
 	}
 	return c.JSON(http.StatusUnauthorized, map[string]string{

@@ -2,7 +2,8 @@ package controllers
 
 import (
 	"mini-project-apotek/lib/database"
-	"mini-project-apotek/lib/services"
+	"mini-project-apotek/lib/services/midtrans"
+	servicesRO "mini-project-apotek/lib/services/rajaongkir"
 	"mini-project-apotek/middlewares"
 	"mini-project-apotek/models"
 	"mini-project-apotek/utils"
@@ -18,7 +19,7 @@ func CheckOutController(c echo.Context) error {
 	token := strings.Fields(c.Request().Header.Values("Authorization")[0])[1]
 	admin, err := middlewares.CheckTokenRole(token)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{
+		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"message": err.Error(),
 		})
 	}
@@ -30,20 +31,10 @@ func CheckOutController(c echo.Context) error {
 
 		c.Bind(&dataCheckOut)
 
-		cities := services.GetCityService()
-		// provinces := services.GetProvinceService()
-		city := strings.Title(dataCheckOut.Address.City)
-		deliveryCost, err := services.GetDeliveryCostService(cities[city])
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, err)
-		}
-
-		address := dataCheckOut.Address.Detail + ", " + dataCheckOut.Address.District + ", " + dataCheckOut.Address.City + ", " + dataCheckOut.Address.Province + ", " + dataCheckOut.Address.PostalCode
-		shipping.Name = dataCheckOut.Name
-		shipping.Address = address
-		shipping.PhoneNumber = dataCheckOut.PhoneNumber
-
-		err = database.SaveShipping(&shipping)
+		cities := servicesRO.GetCityService()
+		// provinces := servicesRO.GetProvinceService()
+		cityDestination := strings.Title(dataCheckOut.Address.City)
+		deliveryCost, err := servicesRO.GetDeliveryCostService(cities[cityDestination])
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, err)
 		}
@@ -52,39 +43,81 @@ func CheckOutController(c echo.Context) error {
 		product, _ := database.GetProductById(strconv.Itoa(int(dataCheckOut.ProductID)))
 		totalProductPrice := product.Price * dataCheckOut.QTY
 		totalPrice := totalProductPrice + uint(deliveryCost)
+		transactionNumber := utils.GenerateRandomTransactionID()
+		userEmail := database.GetUserEmail(c.Param("userID"))
 
-		num := utils.GenerateRandomTransactionID()
-		transaction.TransactionNumber = num
+		midtransRequest := models.MidtransRequest{TransactionNumber: transactionNumber, Amount: int64(totalPrice), Product: models.AllProductResponse{
+			ID:   dataCheckOut.ProductID,
+			Name: product.Name, Price: product.Price},
+			QTY:          int32(dataCheckOut.QTY),
+			ShippingCost: int64(deliveryCost),
+			User: struct {
+				Name  string
+				Email string
+				Phone string
+			}{
+				dataCheckOut.Name,
+				userEmail,
+				dataCheckOut.PhoneNumber}}
+
+		checkOutResponse, err := midtrans.CreateSnapToken(&midtransRequest)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"message": err,
+			})
+		}
+
+		product.Stock = product.Stock - dataCheckOut.QTY
+		err = database.SaveProduct(&product)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{
+				"message": "Server Error",
+			})
+		}
+
+		// Save shipping
+		address := dataCheckOut.Address.Detail + ", " + dataCheckOut.Address.District + ", " + dataCheckOut.Address.City + ", " + dataCheckOut.Address.Province + ", " + dataCheckOut.Address.PostalCode
+		shipping.Name = dataCheckOut.Name
+		shipping.Address = address
+		shipping.PhoneNumber = dataCheckOut.PhoneNumber
+
+		err = database.SaveShipping(&shipping)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		// Save transaction
+		transaction.TransactionNumber = transactionNumber
 		transaction.Date = time.Now().Format("2006-01-02 15:04:05")
 		transaction.UserID = uint(userID)
 		transaction.TotalQTY = dataCheckOut.QTY
 		transaction.ShippingCost = uint(deliveryCost)
 		transaction.TotalPrice = totalPrice
-		transaction.Status = "Ok"
+		transaction.PaymentStatus = "pending"
+		transaction.SnapToken = checkOutResponse.Token
+
 		errTransaction := database.SaveTransaction(&transaction)
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, map[string]string{
+			return c.JSON(http.StatusInternalServerError, map[string]string{
 				"message": errTransaction.Error(),
 			})
 		}
 
+		// Save transaction detail
 		// for _, v := range dataCheckOut.Products {
 		var transactionDetail models.TransactionDetail
 		transactionDetail.TransactionID = transaction.ID
 		transactionDetail.ProductID = dataCheckOut.ProductID
 		transactionDetail.QTY = dataCheckOut.QTY
-		product, _ = database.GetProductById(strconv.Itoa(int(dataCheckOut.ProductID)))
 		transactionDetail.Price = product.Price
 		transactionDetail.ShippingID = shipping.ID
+		// }
 		errTD := database.SaveTransactionDetail(&transactionDetail)
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, map[string]string{
+			return c.JSON(http.StatusInternalServerError, map[string]string{
 				"message": errTD.Error(),
 			})
 		}
-
-		// }
-		checkOutResponse := models.CheckOutResponse{totalProductPrice, uint(deliveryCost), totalPrice}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"Success": checkOutResponse,
@@ -102,6 +135,7 @@ func GetTransactionsController(c echo.Context) error {
 			"message": err.Error(),
 		})
 	}
+
 	transactionsList := []models.TransactionResponse{}
 	for i := range transactions {
 		transactionsResponse := models.TransactionResponse{}
@@ -112,7 +146,8 @@ func GetTransactionsController(c echo.Context) error {
 		transactionsResponse.TotalQTY = transactions[i].TotalQTY
 		transactionsResponse.ShippingCost = transactions[i].ShippingCost
 		transactionsResponse.TotalPrice = transactions[i].TotalPrice
-		transactionsResponse.Status = transactions[i].Status
+		transactionsResponse.PaymentMethod = transactions[i].PaymentMethod
+		transactionsResponse.PaymentStatus = transactions[i].PaymentStatus
 		transactionsResponse.User.ID = transactions[i].User.ID
 		transactionsResponse.User.Name = transactions[i].User.Name
 		transactionsResponse.User.Email = transactions[i].User.Email
@@ -138,7 +173,8 @@ func GetUserTransactionDetailController(c echo.Context) error {
 		Transaction: struct {
 			TransactionNumber string
 			Date              string
-		}{transactionDetail.Transaction.TransactionNumber, transactionDetail.Transaction.Date},
+			Status            string
+		}{transactionDetail.Transaction.TransactionNumber, transactionDetail.Transaction.Date, transactionDetail.Transaction.PaymentStatus},
 		Product: models.AllProductResponse{transactionDetail.Product.ID, transactionDetail.Product.Name, transactionDetail.Product.Price},
 		Address: transactionDetail.Shipping}
 

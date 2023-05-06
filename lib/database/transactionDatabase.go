@@ -43,3 +43,10 @@ func GetUserTransactionDetail(user_id, transaction_id string) (models.Transactio
 	return transactionDetail, nil
 }
 
+func UpdateTransactionPayment(transactionUpdate *models.Notification) error {
+	var transaction models.Transaction
+	if err := config.DB.Model(&transaction).Where("transaction_number = ?", transactionUpdate.OrderID).Updates(models.Transaction{PaymentStatus: transactionUpdate.TransactionStatus, PaymentMethod: transactionUpdate.PaymentType}).Error; err != nil {
+		return err
+	}
+	return nil
+}
