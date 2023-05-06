@@ -38,3 +38,12 @@ func DeleteProduct(id string) error {
 	}
 	return nil
 }
+
+func SearchProduct(name string) ([]models.AllProductResponse, error) {
+	var product []models.AllProductResponse
+	if err := config.DB.Table("products").Where("name LIKE ?", "%"+name+"%").Scan(&product).Error; err != nil {
+		return product, err
+	}
+
+	return product, nil
+}

@@ -25,19 +25,20 @@ func CreateUser(user *models.User) error {
 	return nil
 }
 
-func Login(user *models.User) error {
+func Login(user *models.User) (string, error) {
 	var userForLogin models.User
 	if err := config.DB.Table("users").Select("password").Where("email = ?", user.Email).First(&userForLogin).Error; err != nil {
-		return err
+		return "", err
 	}
 
 	err := utils.ComparePassword(userForLogin.Password, user.Password)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if err := config.DB.Where("email = ? AND password = ?", user.Email, userForLogin.Password).First(&user).Error; err != nil {
-		return err
+		return "", err
 	}
-	return nil
+
+	return user.Role, nil
 }
