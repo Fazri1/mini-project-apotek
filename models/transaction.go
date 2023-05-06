@@ -22,8 +22,10 @@ type TransactionDetail struct {
 	ProductID     uint        `json:"product_id"`
 	QTY           uint        `json:"qty"`
 	Price         uint        `json:"price"`
+	ShippingID    uint        `json:"shipping_id" form:"shipping_id"`
 	Transaction   Transaction `gorm:"foreignKey:TransactionID"`
 	Product       Product     `gorm:"foreignKey:ProductID"`
+	Shipping      Shipping    `gorm:"foreignKey:ShippingID"`
 }
 
 type Shipping struct {
@@ -55,4 +57,30 @@ type CheckOutResponse struct {
 	SubtotalsForProduct  uint `json:"subtotals_for_product"`
 	SubtotalsForShipping uint `json:"subtotals_for_shipping"`
 	TotalPayment         uint `json:"total_payment"`
+}
+
+type TransactionResponse struct {
+	ID                uint
+	TransactionNumber string
+	Date              string
+	UserID            uint
+	TotalQTY          uint
+	ShippingCost      uint
+	TotalPrice        uint
+	Status            string
+	User              UserResponse
+}
+
+type TransactionDetailResponse struct {
+	ID            uint
+	TransactionID uint
+	ProductID     uint
+	QTY           uint
+	Price         uint
+	Transaction   struct {
+		TransactionNumber string
+		Date              string
+	}
+	Product AllProductResponse
+	Address Shipping
 }

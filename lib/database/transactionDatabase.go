@@ -26,3 +26,20 @@ func SaveTransactionDetail(transactionDetail *models.TransactionDetail) error {
 	}
 	return nil
 }
+
+func GetUserTransactions(user_id string) ([]models.Transaction, error) {
+	var transactions []models.Transaction
+	if err := config.DB.Preload("User").Joins("User").Where("user_id = ?", user_id).Find(&transactions).Error; err != nil {
+		return transactions, err
+	}
+	return transactions, nil
+}
+
+func GetUserTransactionDetail(user_id, transaction_id string) (models.TransactionDetail, error) {
+	var transactionDetail models.TransactionDetail
+	if err := config.DB.Preload("Transaction").Preload("Product").Preload("Shipping").Where("transaction_id = ?", transaction_id).Find(&transactionDetail).Error; err != nil {
+		return transactionDetail, err
+	}
+	return transactionDetail, nil
+}
+
