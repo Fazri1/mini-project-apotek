@@ -18,7 +18,7 @@ func AddProductTypeController(c echo.Context) error {
 			"message": err.Error(),
 		})
 	}
-
+  
 	if admin {
 		var productType models.ProductType
 		c.Bind(&productType)
@@ -64,34 +64,18 @@ func UpdateProductTypeController(c echo.Context) error {
 		})
 	}
 
-	if admin {
-		var updatedProductType models.ProductType
-		c.Bind(&updatedProductType)
-
-		productType, err := database.GetProductTypeByID(c.Param("id"))
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, map[string]interface{}{
-				"message": err.Error(),
-			})
-		}
-
-		productType.Name = updatedProductType.Name
-		err = database.SaveProductType(&productType)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, map[string]string{
-				"message": err.Error(),
-			})
-		}
-
-		return c.JSON(http.StatusOK, map[string]interface{}{
-			"message":      "success update product type",
-			"product type": productType,
+	productType.Name = updatedProductType.Name
+	err = database.SaveProductType(&productType)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"message": err.Error(),
 		})
 	}
-	return c.JSON(http.StatusUnauthorized, map[string]string{
-		"message": "Unauthorized Action",
-	})
 
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message":      "success update product type",
+		"product type": productType,
+	})
 }
 
 func DeleteProductTypeController(c echo.Context) error {

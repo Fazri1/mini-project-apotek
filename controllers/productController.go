@@ -11,14 +11,9 @@ import (
 )
 
 func AddProductController(c echo.Context) error {
-	token := strings.Fields(c.Request().Header.Values("Authorization")[0])[1]
+  token := strings.Fields(c.Request().Header.Values("Authorization")[0])[1]
 	admin, err := middlewares.CheckTokenRole(token)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{
-			"message": err.Error(),
-		})
-	}
-
+  
 	if admin {
 		var product models.Product
 
@@ -73,11 +68,6 @@ func GetProductDetailController(c echo.Context) error {
 func UpdateProductController(c echo.Context) error {
 	token := strings.Fields(c.Request().Header.Values("Authorization")[0])[1]
 	admin, err := middlewares.CheckTokenRole(token)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{
-			"message": err.Error(),
-		})
-	}
 
 	if admin {
 		var updatedProduct models.Product
@@ -114,15 +104,8 @@ func UpdateProductController(c echo.Context) error {
 }
 
 func DeleteProductController(c echo.Context) error {
-	token := strings.Fields(c.Request().Header.Values("Authorization")[0])[1]
-	admin, err := middlewares.CheckTokenRole(token)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{
-			"message": err.Error(),
-		})
-	}
-
-	if admin {
+  token := strings.Fields(c.Request().Header.Values("Authorization")[0])[1]
+	admin, err := middlewares.CheckTokenRole(token)if admin {
 		err := database.DeleteProduct(c.Param("id"))
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]string{

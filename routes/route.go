@@ -19,8 +19,9 @@ func New() *echo.Echo {
 	e.GET("/product-types", controllers.GetProductTypesController)
 	e.GET("/products", controllers.GetProductsController)
 	e.GET("/products/:id", controllers.GetProductDetailController)
+	
 
-	eJWT := e.Group("/jwt")
+	eJWT := e.Group("/auth")
 	eJWT.Use(jwtMid.JWT([]byte(constants.SECRET_KEY)))
 	eJWT.POST("/product-types", controllers.AddProductTypeController)
 	eJWT.PUT("/product-types/:id", controllers.UpdateProductTypeController)
@@ -28,5 +29,7 @@ func New() *echo.Echo {
 	eJWT.POST("/products", controllers.AddProductController)
 	eJWT.PUT("/products/:id", controllers.UpdateProductController)
 	eJWT.DELETE("/products/:id", controllers.DeleteProductController)
+  eJWT.GET("/products/search", controllers.SearchProductController)
+	eJWT.POST("/:id/checkout", controllers.CheckOutController)
 	return e
 }
