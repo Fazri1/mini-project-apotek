@@ -16,9 +16,9 @@ jobs:
     - name: Deploy
       uses: appleboy/ssh-action@master
       with:
-        host: $ {{ secrets.AWS_HOST }}
-        username: $ {{ secrets.AWS_USER }}
-        key: $ {{ secrets.AWS_SECRET_KEY }}
+        host: ${{ secrets.AWS_HOST }}
+        username: ${{ secrets.AWS_USER }}
+        key: ${{ secrets.AWS_SECRET_KEY }}
         port: 22
         script: |
           sudo docker pull fazri1/go-apotek
