@@ -1,0 +1,26 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Deploy
+
+on:
+  push:
+    branches: [ "release" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: $ {{ secrets.AWS_HOST }}
+        username: $ {{ secrets.AWS_USER }}
+        key: $ {{ secrets.AWS_SECRET_KEY }}
+        port: 22
+        script: |
+          sudo docker pull fazri1/go-apotek
+          sudo docker run -p 80:8080 fazri1/go-apotek
+        
