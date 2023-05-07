@@ -8,6 +8,6 @@ COPY go.sum ./
 RUN go mod download
 COPY . ./
 
-RUN go build -o fazri1/go-apotek
+RUN go build -o /fazri1/go-apotek
 EXPOSE 8080
 CMD ["/fazri1/go-apotek"]
