@@ -43,10 +43,11 @@ type ProductDetailResponse struct {
 	Product_Type_ID uint
 	Stock           uint
 	Price           uint
-	ProductType     ProductTypeResponse
+	ProductType     struct {
+		Name string
+	}
 }
 
 type ProductTypeResponse struct {
-	ID   uint
 	Name string
 }

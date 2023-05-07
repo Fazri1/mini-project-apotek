@@ -30,9 +30,11 @@ func AddProductTypeController(c echo.Context) error {
 			})
 		}
 
+		productTypeResponse := models.ProductTypeResponse{ID: productType.ID, Name: productType.Name}
+
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message":      "Success Add Product Type",
-			"product type": productType,
+			"product type": productTypeResponse,
 		})
 	}
 	return c.JSON(http.StatusUnauthorized, map[string]string{
@@ -48,9 +50,18 @@ func GetProductTypesController(c echo.Context) error {
 		})
 	}
 
+	productTypesResponseList := []models.ProductTypeResponse{}
+
+	for i := range productTypes {
+		var productTypeResponse models.ProductTypeResponse
+		productTypeResponse.ID = productTypes[i].ID
+		productTypeResponse.Name = productTypes[i].Name
+		productTypesResponseList = append(productTypesResponseList, productTypeResponse)
+	}
+
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message":       "Success Get All Product Types",
-		"product types": productTypes,
+		"product types": productTypesResponseList,
 	})
 
 }
@@ -83,9 +94,11 @@ func UpdateProductTypeController(c echo.Context) error {
 			})
 		}
 
+		productTypeResponse := models.ProductTypeResponse{ID: productType.ID, Name: productType.Name}
+
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message":      "success update product type",
-			"product type": productType,
+			"product type": productTypeResponse,
 		})
 	}
 	return c.JSON(http.StatusUnauthorized, map[string]string{
