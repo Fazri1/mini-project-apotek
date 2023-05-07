@@ -33,7 +33,7 @@ func New() *echo.Echo {
 	eJWT.DELETE("/products/:id", controllers.DeleteProductController)
 	eJWT.POST("/:userID/checkout", controllers.CheckOutController)
 	eJWT.GET("/:userID/transactions", controllers.GetTransactionsController)
-	eJWT.GET("/:userID/transaction-details/:transactionID", controllers.GetUserTransactionDetailController)
+	eJWT.GET("/users/:userID/transaction-details/:transactionID", controllers.GetUserTransactionDetailController)
 
 	return e
 }
