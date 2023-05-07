@@ -51,3 +51,31 @@ func GetUserEmail(id string) string {
 
 	return user.Email
 }
+
+func UpdateUser(id string, updatedUser *models.User) error {
+	var user models.User
+	if err := config.DB.First(&user, id).Error; err != nil {
+		return err
+	}
+
+	user.Name = updatedUser.Name
+	user.Email = updatedUser.Email
+	user.Password = updatedUser.Password
+
+	hashedPassword, err := utils.HashPassword(user.Password)
+	if err != nil {
+		return err
+	}
+
+	err = utils.ComparePassword(hashedPassword, user.Password)
+	if err != nil {
+		return err
+	}
+
+	user.Password = hashedPassword
+
+	if err := config.DB.Save(&user).Error; err != nil {
+		return err
+	}
+	return nil
+}

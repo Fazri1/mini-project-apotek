@@ -10,6 +10,7 @@ type Product struct {
 	Product_Type_ID uint        `json:"product_type_id" form:"product_type_id"`
 	Stock           uint        `json:"stock" form:"stock"`
 	Price           uint        `json:"price" form:"price" gorm:"type:double"`
+	ImageURL        string      `json:"image_url"`
 	ProductType     ProductType `gorm:"foreignKey:Product_Type_ID"`
 }
 
@@ -42,11 +43,10 @@ type ProductDetailResponse struct {
 	Product_Type_ID uint
 	Stock           uint
 	Price           uint
-	ProductType     struct {
-		Name string
-	}
+	ProductType     ProductTypeResponse
 }
 
 type ProductTypeResponse struct {
+	ID   uint
 	Name string
 }

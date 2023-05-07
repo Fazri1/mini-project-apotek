@@ -12,8 +12,8 @@ var DB *gorm.DB
 
 func InitDB() {
 	DB_USER := "root"
-	DB_PASS := "1qazxsw2"
-	DB_HOST := "altera-database.cigv70ulemme.ap-southeast-2.rds.amazonaws.com"
+	DB_PASS := ""
+	DB_HOST := "127.0.0.1"
 	DB_PORT := "3306"
 	DB_NAME := "apotek"
 

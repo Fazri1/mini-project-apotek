@@ -70,7 +70,7 @@ func GetProductDetailController(c echo.Context) error {
 
 	productDetailResponse := models.ProductDetailResponse{ID: product.ID, Code: product.Code,
 		Name: product.Name, Description: product.Description, Product_Type_ID: product.Product_Type_ID, Stock: product.Stock,
-		Price: product.Price, ProductType: models.ProductTypeResponse{product.ProductType.Name}}
+		Price: product.Price, ProductType: models.ProductTypeResponse{ID: product.ProductType.ID, Name: product.ProductType.Name}}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "Success Get Product Detail",

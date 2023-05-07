@@ -24,6 +24,7 @@ func New() *echo.Echo {
 
 	eJWT := e.Group("/auth")
 	eJWT.Use(jwtMid.JWT([]byte(constants.JWT_SECRET_KEY)))
+	eJWT.PUT("/users/:id", controllers.UpdateUserController)
 	eJWT.POST("/product-types", controllers.AddProductTypeController)
 	eJWT.PUT("/product-types/:id", controllers.UpdateProductTypeController)
 	eJWT.DELETE("/product-types/:id", controllers.DeleteProductTypeController)
