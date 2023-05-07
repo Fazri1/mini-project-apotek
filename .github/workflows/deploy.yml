@@ -14,11 +14,11 @@ jobs:
     steps:
 
     - name: Deploy
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@v0.1.10
       with:
         host: ${{ secrets.AWS_HOST }}
         username: ${{ secrets.AWS_USER }}
-        key: ${{ secrets.AWS_SECRET_KEY }}
+        key: ${{ secrets.AWS_KEY }}
         port: 22
         script: |
           whoami
