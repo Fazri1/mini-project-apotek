@@ -112,7 +112,7 @@ func UpdateProductController(c echo.Context) error {
 			})
 		}
 
-		productResponse := models.ProductDetailResponse{ID: product.ID, Code: product.Code,
+		productResponse := models.ProductResponse{ID: product.ID, Code: product.Code,
 			Name: product.Name, Description: product.Description, Product_Type_ID: product.Product_Type_ID, Stock: product.Stock,
 			Price: product.Price}
 
