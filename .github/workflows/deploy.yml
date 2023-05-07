@@ -22,6 +22,7 @@ jobs:
         port: 22
         script: |
           whoami
+          ls -l
           docker pull fazri1/go-apotek
           docker run -p 80:8080 fazri1/go-apotek
         
