@@ -21,6 +21,7 @@ jobs:
         key: ${{ secrets.AWS_SECRET_KEY }}
         port: 22
         script: |
-          sudo docker pull fazri1/go-apotek
-          sudo docker run -p 80:8080 fazri1/go-apotek
+          whoami
+          docker pull fazri1/go-apotek
+          docker run -p 80:8080 fazri1/go-apotek
         
