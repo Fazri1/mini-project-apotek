@@ -19,6 +19,7 @@ jobs:
         host: ${{ secrets.AWS_HOST }}
         username: ${{ secrets.AWS_USER }}
         key: ${{ secrets.AWS_KEY }}
+        passphrase: ${{ secrets.AWS_PASSPRHASE }}
         port: 22
         script: |
           whoami
