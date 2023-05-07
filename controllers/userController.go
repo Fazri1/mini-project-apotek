@@ -53,3 +53,18 @@ func LoginController(c echo.Context) error {
 		"token":   token,
 	})
 }
+
+func UpdateUserController(c echo.Context) error {
+	var user models.User
+	c.Bind(&user)
+
+	err := database.UpdateUser(c.Param("id"), &user)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"message": err.Error(),
+		})
+	}
+	return c.JSON(http.StatusOK, map[string]string{
+		"message": "Success Update User",
+	})
+}
