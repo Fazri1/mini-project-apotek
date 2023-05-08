@@ -16,5 +16,6 @@ func ComparePassword(hashedPassword, password string) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }

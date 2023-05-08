@@ -14,7 +14,7 @@ func New() *echo.Echo {
 	e := echo.New()
 	mid.LogMiddleware(e)
 
-	e.POST("/register", controllers.CreateUserController)
+	e.POST("/register", controllers.RegisterController)
 	e.POST("/login", controllers.LoginController)
 	e.GET("/product-types", controllers.GetProductTypesController)
 	e.GET("/products", controllers.GetProductsController)
@@ -31,8 +31,8 @@ func New() *echo.Echo {
 	eJWT.POST("/products", controllers.AddProductController)
 	eJWT.PUT("/products/:id", controllers.UpdateProductController)
 	eJWT.DELETE("/products/:id", controllers.DeleteProductController)
-	eJWT.POST("/:userID/checkout", controllers.CheckOutController)
-	eJWT.GET("/:userID/transactions", controllers.GetTransactionsController)
+	eJWT.POST("/users/:userID/checkout", controllers.CheckOutController)
+	eJWT.GET("/users/:userID/transactions", controllers.GetTransactionsController)
 	eJWT.GET("/users/:userID/transaction-details/:transactionID", controllers.GetUserTransactionDetailController)
 
 	return e

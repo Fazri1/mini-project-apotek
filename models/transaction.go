@@ -18,49 +18,6 @@ type Transaction struct {
 	User              User   `gorm:"foreignKey:UserID"`
 }
 
-type TransactionDetail struct {
-	ID            uint        `gorm:"primarykey"`
-	TransactionID uint        `json:"transaction_id"`
-	ProductID     uint        `json:"product_id"`
-	QTY           uint        `json:"qty"`
-	Price         uint        `json:"price"`
-	ShippingID    uint        `json:"shipping_id" form:"shipping_id"`
-	Transaction   Transaction `gorm:"foreignKey:TransactionID"`
-	Product       Product     `gorm:"foreignKey:ProductID"`
-	Shipping      Shipping    `gorm:"foreignKey:ShippingID"`
-}
-
-type Shipping struct {
-	ID          uint   `gorm:"primarykey;autoIncrement"`
-	Name        string `json:"name" form:"name"`
-	Address     string `json:"address" form:"address"`
-	PhoneNumber string `json:"phone_number" form:"phone_number"`
-}
-
-type CheckOut struct {
-	Address struct {
-		Detail     string `json:"detail" form:"detail"`
-		Province   string `json:"province" form:"province"`
-		City       string `json:"city" form:"city"`
-		District   string `json:"district" form:"district"`
-		PostalCode string `json:"postal_code" form:"postal_code"`
-	} `json:"address" form:"address"`
-	Name        string `json:"name" form:"name"`
-	PhoneNumber string `json:"phone_number" form:"phone_number"`
-	// Products    []struct {
-	ProductID uint `json:"product_id" form:"product_id"`
-	QTY       uint `json:"qty" form:"qtr"`
-	// } `json:"products"`
-
-	PaymentMethod string `json:"payment_method" form:"payment_method"`
-}
-
-type CheckOutResponse struct {
-	SubtotalsForProduct  uint `json:"subtotals_for_product"`
-	SubtotalsForShipping uint `json:"subtotals_for_shipping"`
-	TotalPayment         uint `json:"total_payment"`
-}
-
 type TransactionResponse struct {
 	ID                uint
 	TransactionNumber string
@@ -74,21 +31,6 @@ type TransactionResponse struct {
 	User              UserResponse
 }
 
-type TransactionDetailResponse struct {
-	ID            uint
-	TransactionID uint
-	ProductID     uint
-	QTY           uint
-	Price         uint
-	Transaction   struct {
-		TransactionNumber string
-		Date              string
-		Status            string
-	}
-	Product AllProductResponse
-	Address Shipping
-}
-
 type MidtransRequest struct {
 	TransactionNumber string
 	Amount            int64
@@ -100,4 +42,31 @@ type MidtransRequest struct {
 		Email string
 		Phone string
 	}
+}
+
+type CheckOut struct {
+	Address struct {
+		Detail     string `json:"detail" form:"detail"`
+		Province   string `json:"province" form:"province"`
+		City       string `json:"city" form:"city"`
+		District   string `json:"district" form:"district"`
+		PostalCode string `json:"postal_code" form:"postal_code"`
+	} `json:"address" form:"address"`
+	Name          string `json:"name" form:"name"`
+	PhoneNumber   string `json:"phone_number" form:"phone_number"`
+	ProductID     uint   `json:"product_id" form:"product_id"`
+	QTY           uint   `json:"qty" form:"qty"`
+	PaymentMethod string `json:"payment_method" form:"payment_method"`
+}
+
+type CheckOutResponse struct {
+	SubtotalsForProduct  uint `json:"subtotals_for_product"`
+	SubtotalsForShipping uint `json:"subtotals_for_shipping"`
+	TotalPayment         uint `json:"total_payment"`
+}
+
+type Notification struct {
+	OrderID           string `json:"order_id"`
+	PaymentType       string `json:"payment_type"`
+	TransactionStatus string `json:"transaction_status"`
 }
