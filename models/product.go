@@ -10,13 +10,19 @@ type Product struct {
 	Product_Type_ID uint        `json:"product_type_id" form:"product_type_id"`
 	Stock           uint        `json:"stock" form:"stock"`
 	Price           uint        `json:"price" form:"price" gorm:"type:double"`
-	ImageURL        string      `json:"image_url"`
+	Image_URI       string      `json:"image" form:"image"`
 	ProductType     ProductType `gorm:"foreignKey:Product_Type_ID"`
 }
 
 type ProductType struct {
 	gorm.Model
-	Name string `json:"name" form:"name" gorm:"type:varchar(20)"`
+	Name string `json:"name" gorm:"type:varchar(20)"`
+}
+
+type Image struct {
+	gorm.Model
+	Name  string `json:"name"`
+	S3Key string `json:"s3_key"`
 }
 
 type ProductResponse struct {
@@ -27,12 +33,14 @@ type ProductResponse struct {
 	Product_Type_ID uint
 	Stock           uint
 	Price           uint
+	ImageURI        string
 }
 
 type AllProductResponse struct {
-	ID    uint
-	Name  string
-	Price uint
+	ID       uint
+	Name     string
+	Price    uint
+	ImageURI string
 }
 
 type ProductDetailResponse struct {
@@ -43,6 +51,7 @@ type ProductDetailResponse struct {
 	Product_Type_ID uint
 	Stock           uint
 	Price           uint
+	ImageURI        string
 	ProductType     ProductTypeResponse
 }
 

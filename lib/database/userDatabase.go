@@ -77,5 +77,19 @@ func UpdateUser(id string, updatedUser *models.User) error {
 	if err := config.DB.Save(&user).Error; err != nil {
 		return err
 	}
+
 	return nil
+}
+
+func CheckEmail(email string) uint {
+	var user models.User
+	if err := config.DB.Table("users").Where("email = ?", email).First(&user).Error; err != nil {
+		return 0
+	}
+
+	if user.ID != 0 {
+		return user.ID
+	}
+
+	return 0
 }
