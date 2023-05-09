@@ -15,7 +15,7 @@ func CreateSnapToken(request *models.MidtransRequest) (*snap.Response, error) {
 
 	req := &snap.Request{
 		TransactionDetails: midtrans.TransactionDetails{
-			OrderID:  request.TransactionNumber,
+			OrderID:  request.OrderNumber,
 			GrossAmt: request.Amount,
 		},
 		Items: &[]midtrans.ItemDetails{

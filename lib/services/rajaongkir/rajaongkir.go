@@ -42,6 +42,7 @@ func GetCityService() (map[string]string, error) {
 	if err != nil {
 		return map[string]string{}, err
 	}
+
 	req.Header.Add("key", constants.RO_API_KEY)
 
 	res, err := http.DefaultClient.Do(req)

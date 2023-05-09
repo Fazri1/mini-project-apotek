@@ -1,13 +1,11 @@
 package controllers
 
 import (
-	"mini-project-apotek/constants"
 	"mini-project-apotek/lib/database"
 	awss3 "mini-project-apotek/lib/services/aws"
 	"mini-project-apotek/middlewares"
 	"mini-project-apotek/models"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -30,8 +28,8 @@ func AddProductController(c echo.Context) error {
 
 		image, err := c.FormFile("image")
 		if image != nil {
-			os.Setenv("AWS_ACCESS_KEY_ID", constants.AWS_ACCESS_KEY_ID)
-			os.Setenv("AWS_SECRET_ACCESS_KEY", constants.AWS_SECRET_ACCESS_KEY)
+			// os.Setenv("AWS_ACCESS_KEY_ID", constants.AWS_ACCESS_KEY_ID)
+			// os.Setenv("AWS_SECRET_ACCESS_KEY", constants.AWS_SECRET_ACCESS_KEY)
 
 			if err != nil {
 				return c.JSON(http.StatusBadRequest, map[string]string{
@@ -46,7 +44,7 @@ func AddProductController(c echo.Context) error {
 				})
 			}
 		}
-		product.Image_URI = imageURI
+		product.ImageURI = imageURI
 		err = database.SaveProduct(&product)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
@@ -55,7 +53,7 @@ func AddProductController(c echo.Context) error {
 		}
 
 		productResponse := models.ProductResponse{ID: product.ID, Code: product.Code, Name: product.Name, Description: product.Description,
-			Product_Type_ID: product.Product_Type_ID, Stock: product.Stock, Price: product.Price, ImageURI: product.Image_URI}
+			ProductTypeID: product.ProductTypeID, Stock: product.Stock, Price: product.Price, ImageURI: product.ImageURI}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message": "Success add product",
@@ -93,8 +91,8 @@ func GetProductDetailController(c echo.Context) error {
 	}
 
 	productDetailResponse := models.ProductDetailResponse{ID: product.ID, Code: product.Code,
-		Name: product.Name, Description: product.Description, Product_Type_ID: product.Product_Type_ID, Stock: product.Stock,
-		Price: product.Price, ImageURI: product.Image_URI, ProductType: models.ProductTypeResponse{ID: product.ProductType.ID, Name: product.ProductType.Name}}
+		Name: product.Name, Description: product.Description, ProductTypeID: product.ProductTypeID, Stock: product.Stock,
+		Price: product.Price, ImageURI: product.ImageURI, ProductType: models.ProductTypeResponse{ID: product.ProductType.ID, Name: product.ProductType.Name}}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "Success get product detail",
@@ -112,8 +110,8 @@ func UpdateProductController(c echo.Context) error {
 	}
 
 	if admin {
-		os.Setenv("AWS_ACCESS_KEY_ID", constants.AWS_ACCESS_KEY_ID)
-		os.Setenv("AWS_SECRET_ACCESS_KEY", constants.AWS_SECRET_ACCESS_KEY)
+		// os.Setenv("AWS_ACCESS_KEY_ID", constants.AWS_ACCESS_KEY_ID)
+		// os.Setenv("AWS_SECRET_ACCESS_KEY", constants.AWS_SECRET_ACCESS_KEY)
 		var updatedProduct models.Product
 		c.Bind(&updatedProduct)
 
@@ -124,7 +122,7 @@ func UpdateProductController(c echo.Context) error {
 			})
 		}
 
-		imageURI := product.Image_URI
+		imageURI := product.ImageURI
 		image, _ := c.FormFile("image")
 		if image != nil {
 			uri, s := awss3.UploadFileS3(updatedProduct.Name, image)
@@ -139,10 +137,10 @@ func UpdateProductController(c echo.Context) error {
 		product.Code = updatedProduct.Code
 		product.Name = updatedProduct.Name
 		product.Description = updatedProduct.Description
-		product.Product_Type_ID = updatedProduct.Product_Type_ID
+		product.ProductTypeID = updatedProduct.ProductTypeID
 		product.Stock = updatedProduct.Stock
 		product.Price = updatedProduct.Price
-		product.Image_URI = imageURI
+		product.ImageURI = imageURI
 
 		err = database.SaveProduct(&product)
 		if err != nil {
@@ -151,13 +149,8 @@ func UpdateProductController(c echo.Context) error {
 			})
 		}
 
-		productResponse := models.ProductResponse{ID: product.ID, Code: product.Code,
-			Name: product.Name, Description: product.Description, Product_Type_ID: product.Product_Type_ID, Stock: product.Stock,
-			Price: product.Price, ImageURI: product.Image_URI}
-
-		return c.JSON(http.StatusOK, map[string]interface{}{
+		return c.JSON(http.StatusOK, map[string]string{
 			"message": "Success update product",
-			"product": productResponse,
 		})
 	}
 
