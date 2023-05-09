@@ -38,7 +38,6 @@ func InitDB() {
 func initialMigration() {
 	DB.AutoMigrate(&models.User{})
 	DB.AutoMigrate(&models.Product{})
-	DB.AutoMigrate(&models.Image{})
 	DB.AutoMigrate(&models.ProductType{})
 	DB.AutoMigrate(&models.Shipping{})
 	DB.AutoMigrate(&models.Order{})

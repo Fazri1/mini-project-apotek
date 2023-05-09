@@ -19,12 +19,6 @@ type ProductType struct {
 	Name string `json:"name" gorm:"type:varchar(20)"`
 }
 
-type Image struct {
-	gorm.Model
-	Name  string `json:"name"`
-	S3Key string `json:"s3_key"`
-}
-
 type ProductResponse struct {
 	ID            uint
 	Code          string
