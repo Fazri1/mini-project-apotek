@@ -6,13 +6,13 @@ import (
 	"time"
 )
 
-func GenerateRandomTransactionID() string {
+func GenerateRandomOrderID() string {
 	currentTime := time.Now()
 	rand.Seed(time.Now().UnixNano())
 	randomNum := rand.Intn(9999) + 1000
-	transactionID := currentTime.Format("02012006") + "-" + fmt.Sprintf("%d", randomNum)
+	orderID := currentTime.Format("02012006") + "-" + fmt.Sprintf("%d", randomNum)
 
-	return transactionID
+	return orderID
 }
 
 func GenerateRandomString(name string) string {

@@ -41,6 +41,6 @@ func initialMigration() {
 	DB.AutoMigrate(&models.Image{})
 	DB.AutoMigrate(&models.ProductType{})
 	DB.AutoMigrate(&models.Shipping{})
-	DB.AutoMigrate(&models.Transaction{})
-	DB.AutoMigrate(&models.TransactionDetail{})
+	DB.AutoMigrate(&models.Order{})
+	DB.AutoMigrate(&models.OrderDetail{})
 }

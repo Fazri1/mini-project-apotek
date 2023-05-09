@@ -12,7 +12,7 @@ func NotificationController(c echo.Context) error {
 	var notification models.Notification
 	c.Bind(&notification)
 
-	err := database.UpdateTransactionPayment(&notification)
+	err := database.UpdateOrderPayment(&notification)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"message": err.Error(),

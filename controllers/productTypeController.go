@@ -94,11 +94,8 @@ func UpdateProductTypeController(c echo.Context) error {
 			})
 		}
 
-		productTypeResponse := models.ProductTypeResponse{ID: productType.ID, Name: productType.Name}
-
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"message":      "Success update product type",
-			"product type": productTypeResponse,
+			"message": "Success update product type",
 		})
 	}
 	return c.JSON(http.StatusUnauthorized, map[string]string{

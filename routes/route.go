@@ -32,8 +32,12 @@ func New() *echo.Echo {
 	eJWT.PUT("/products/:id", controllers.UpdateProductController)
 	eJWT.DELETE("/products/:id", controllers.DeleteProductController)
 	eJWT.POST("/users/:userID/checkout", controllers.CheckOutController)
-	eJWT.GET("/users/:userID/transactions", controllers.GetTransactionsController)
-	eJWT.GET("/users/:userID/transaction-details/:transactionID", controllers.GetUserTransactionDetailController)
+	eJWT.GET("/users/:userID/orders", controllers.GetUserOrdersController)
+	eJWT.GET("/users/:userID/orders/:orderID", controllers.GetUserOrderDetailController)
+	eJWT.PUT("/users/:userID/orders/:orderID", controllers.UpdateStatusOrderController)
+	eJWT.GET("/orders", controllers.GetAllOrdersController)
+	eJWT.GET("/orders/:orderID", controllers.GetOrderDetailController)
+	eJWT.PUT("/orders/:orderID", controllers.UpdateStatusOrderController)
 
 	return e
 }
