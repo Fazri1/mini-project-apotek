@@ -5,25 +5,22 @@ name: Deploy
 
 on:
   push:
-    branches: [ "release" ]
+    branches: ["release"]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
-
-    - name: Deploy
-      uses: appleboy/ssh-action@v0.1.10
-      with:
-        host: ${{ secrets.AWS_HOST }}
-        username: ${{ secrets.AWS_USER }}
-        key: ${{ secrets.AWS_KEY }}
-        passphrase: ${{ secrets.AWS_PASSPRHASE }}
-        port: 22
-        script: |
-          whoami
-          ls -l
-          docker pull fazri1/go-apotek
-          docker run -p 80:8080 fazri1/go-apotek
-        
+      - name: Deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_KEY }}
+          passphrase: ${{ secrets.AWS_PASSPRHASE }}
+          port: 22
+          script: |
+            whoami
+            ls -l
+            docker pull fazri1/go-apotek
+            docker run -p 80:8080 fazri1/go-apotek

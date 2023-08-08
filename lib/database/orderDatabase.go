@@ -51,7 +51,7 @@ func GetUserOrderDetail(user_id, order_id string) (models.OrderDetail, error) {
 func UpdateOrderPayment(orderUpdate *models.Notification) error {
 	var order models.Order
 	if err := config.DB.Model(&order).Where("order_number = ?", orderUpdate.OrderID).Updates(models.Order{Status: "packed",
-		PaymentStatus: orderUpdate.PaymentStatus, PaymentMethod: orderUpdate.PaymentType}).Error; err != nil {
+		PaymentStatus: orderUpdate.TransactionStatus, PaymentMethod: orderUpdate.PaymentType}).Error; err != nil {
 		return err
 	}
 

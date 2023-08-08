@@ -65,9 +65,3 @@ type CheckOutResponse struct {
 	SubtotalsForShipping uint `json:"subtotals_for_shipping"`
 	TotalPayment         uint `json:"total_payment"`
 }
-
-type Notification struct {
-	OrderID       string `json:"order_id"`
-	PaymentType   string `json:"payment_type"`
-	PaymentStatus string `json:"transaction_status"`
-}

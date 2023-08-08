@@ -3,7 +3,6 @@ package constants
 import "os"
 
 const JWT_SECRET_KEY = "miniProject"
-
 // raja ongkir API
 var RO_API_KEY = os.Getenv("RO_API_KEY")
 
