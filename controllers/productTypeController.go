@@ -33,12 +33,12 @@ func AddProductTypeController(c echo.Context) error {
 		productTypeResponse := models.ProductTypeResponse{ID: productType.ID, Name: productType.Name}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"message":      "Success Add Product Type",
+			"message":      "Success add product type",
 			"product type": productTypeResponse,
 		})
 	}
 	return c.JSON(http.StatusUnauthorized, map[string]string{
-		"message": "Unauthorized Action",
+		"message": "Unauthorized action",
 	})
 }
 
@@ -60,7 +60,7 @@ func GetProductTypesController(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message":       "Success Get All Product Types",
+		"message":       "Success get all product types",
 		"product types": productTypesResponseList,
 	})
 
@@ -94,11 +94,8 @@ func UpdateProductTypeController(c echo.Context) error {
 			})
 		}
 
-		productTypeResponse := models.ProductTypeResponse{ID: productType.ID, Name: productType.Name}
-
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"message":      "success update product type",
-			"product type": productTypeResponse,
+			"message": "Success update product type",
 		})
 	}
 	return c.JSON(http.StatusUnauthorized, map[string]string{
@@ -125,10 +122,10 @@ func DeleteProductTypeController(c echo.Context) error {
 		}
 
 		return c.JSON(http.StatusOK, map[string]string{
-			"message": "Success Delete Product Type",
+			"message": "Success delete product type",
 		})
 	}
 	return c.JSON(http.StatusUnauthorized, map[string]string{
-		"message": "Unauthorized Action",
+		"message": "Unauthorized action",
 	})
 }

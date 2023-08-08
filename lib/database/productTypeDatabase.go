@@ -36,5 +36,6 @@ func DeleteProductType(id string) error {
 	if err := config.DB.Delete(&productType, id).Error; err != nil {
 		return err
 	}
+
 	return nil
 }

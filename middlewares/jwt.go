@@ -20,7 +20,6 @@ func CreateToken(id uint, name, role string) (string, error) {
 }
 
 func CheckTokenRole(tokenString string) (bool, error) {
-	// tokenString := strings.Fields(c.Request().Header.Values("Authorization")[0])[1]
 	claims := jwt.MapClaims{}
 	_, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(constants.JWT_SECRET_KEY), nil

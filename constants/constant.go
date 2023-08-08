@@ -1,11 +1,18 @@
 package constants
 
+import "os"
+
 const JWT_SECRET_KEY = "miniProject"
 
 // raja ongkir API
-const RO_API_KEY = "18a6490a81f488f0757ca182f1cbee34"
+var RO_API_KEY = os.Getenv("RO_API_KEY")
 
 // midtrans API
-const MT_MERCHANT_ID = "G918592753"
-const MT_CLIENT_KEY = "SB-Mid-client-GK4wvUHEC_24hZtC"
-const MT_SERVER_KEY = "SB-Mid-server-Y8Hr0xFp2kCJeJJN9mq1MVO9"
+var MT_MERCHANT_ID = os.Getenv("MT_MERCHANT_ID")
+var MT_CLIENT_KEY = os.Getenv("MT_CLIENT_KEY")
+var MT_SERVER_KEY = os.Getenv("MT_SERVER_KEY")
+
+// AWS
+var AWS_ACCESS_KEY_ID = os.Getenv("AWS_ACCESS_KEY_ID")
+var AWS_SECRET_ACCESS_KEY = os.Getenv("AWS_SECRET_ACCESS_KEY")
+var AWS_REGION = os.Getenv("AWS_REGION")
