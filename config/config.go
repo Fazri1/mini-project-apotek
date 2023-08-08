@@ -11,7 +11,7 @@ import (
 var DB *gorm.DB
 
 func InitDB() {
-	DB_USER := "root"
+	DB_USER := "egi"
 	DB_PASS := ""
 	DB_HOST := "127.0.0.1"
 	DB_PORT := "3306"
@@ -36,10 +36,5 @@ func InitDB() {
 }
 
 func initialMigration() {
-	DB.AutoMigrate(&models.User{})
-	DB.AutoMigrate(&models.Product{})
-	DB.AutoMigrate(&models.ProductType{})
-	DB.AutoMigrate(&models.Shipping{})
-	DB.AutoMigrate(&models.Order{})
-	DB.AutoMigrate(&models.OrderDetail{})
+	DB.AutoMigrate(&models.User{},&models.Product{},&models.ProductType{},&models.Shipping{},&models.Order{},&models.OrderDetail{})
 }
