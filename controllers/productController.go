@@ -55,7 +55,7 @@ func AddProductController(c echo.Context) error {
 		productResponse := models.ProductResponse{ID: product.ID, Code: product.Code, Name: product.Name, Description: product.Description,
 			ProductTypeID: product.ProductTypeID, Stock: product.Stock, Price: product.Price, ImageURI: product.ImageURI}
 
-		return c.JSON(http.StatusOK, map[string]interface{}{
+		return c.JSON(http.StatusCreated, map[string]interface{}{
 			"message": "Success add product",
 			"product": productResponse,
 		})

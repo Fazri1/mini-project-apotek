@@ -29,7 +29,7 @@ func RegisterController(c echo.Context) error {
 	}
 	userResponse := models.UserResponse{ID: user.ID, Name: user.Name, Email: user.Email}
 
-	return c.JSON(http.StatusOK, map[string]interface{}{
+	return c.JSON(http.StatusCreated, map[string]interface{}{
 		"message": "Success create user",
 		"user":    userResponse,
 	})
