@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"mini-project-apotek/lib/database"
 	"mini-project-apotek/lib/services/midtrans"
 	servicesRO "mini-project-apotek/lib/services/rajaongkir"
@@ -37,8 +36,8 @@ func CheckOutController(c echo.Context) error {
 				"message": err.Error(),
 			})
 		}
-		fmt.Println("ok")
-		destinationCity := strings.Title(dataCheckOut.Address.City)
+		
+		destinationCity := strings.ToTitle(dataCheckOut.Address.City)
 		deliveryCost, errCost := servicesRO.GetDeliveryCostService(cities[destinationCity])
 		if errCost != nil {
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{
